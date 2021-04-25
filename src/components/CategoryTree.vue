@@ -11,6 +11,7 @@ export default {
     }),
     methods: {
         onSelect(selectedKeys, info) {
+            this.$store.dispatch('mainPage/pullMainTableData', selectedKeys[0])
             console.log('selected', selectedKeys, info);
         },
         onCheck(checkedKeys, info) {

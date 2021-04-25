@@ -14,8 +14,8 @@ const actions = {
         })
     },
 
-    pullMainTableData: ({ commit }) => {
-        fetchMainTableData((data) => {
+    pullMainTableData: ({ commit }, tableId) => {
+        fetchMainTableData(tableId, (data) => {
             commit('setMainTableData', data)
         }, () => {
             // 错误处理程序

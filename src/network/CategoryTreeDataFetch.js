@@ -1,14 +1,5 @@
 import axios from 'axios'
 const wasm = import('../wasm/pkg')
-// import wasm from '../wasm/pkg'
-
-// (async () => {
-//     let moduleVal = await wasm
-//     let value = [{
-//         high: 12
-//     }]
-//     moduleVal.pass_value(value)
-// })()
 
 /**
  * 获取左树的结构数据，然后刷新界面

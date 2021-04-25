@@ -1,157 +1,118 @@
 <template>
-  <a-button class="editable-add-btn" @click="handleAdd" style="margin-bottom: 8px">Add</a-button>
-  <a-table bordered :data-source="dataSource" :columns="columns">
-    <template #name="{ text, record }">
-      <div class="editable-cell">
-        <div v-if="editableData[record.key]" class="editable-cell-input-wrapper">
-          <a-input v-model:value="editableData[record.key].name" @pressEnter="save(record.key)" />
-          <check-outlined class="editable-cell-icon-check" @click="save(record.key)" />
-        </div>
-        <div v-else class="editable-cell-text-wrapper">
-          {{ text || ' ' }}
-          <edit-outlined class="editable-cell-icon" @click="edit(record.key)" />
-        </div>
+  <a-table class="main-table" :columns="tableMeta" :data-source="tableData" bordered>
+    <template v-for="col in cols" #[col]="{ text, record }" :key="col">
+      <div>
+        <a-input
+          v-if="editableData[record.key]"
+          v-model:value="editableData[record.key][col]"
+          style="margin: -5px 0"
+        />
+        <template v-else>
+          {{ text }}
+        </template>
       </div>
     </template>
     <template #operation="{ record }">
-      <a-popconfirm
-        v-if="dataSource.length"
-        title="Sure to delete?"
-        @confirm="onDelete(record.key)"
-      >
-        <a>Delete</a>
-      </a-popconfirm>
+      <div class="editable-row-operations">
+        <span v-if="editableData[record.key]">
+          <a @click="save(record.key)">Save</a>
+          <a-popconfirm title="Sure to cancel?" @confirm="cancel(record.key)">
+            <a>Cancel</a>
+          </a-popconfirm>
+        </span>
+        <span v-else>
+          <a @click="edit(record.key)">Edit</a>
+        </span>
+      </div>
     </template>
   </a-table>
 </template>
 <script>
-import { computed, defineComponent, reactive, ref } from 'vue';
-import { CheckOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { cloneDeep } from 'lodash-es';
-export default defineComponent({
-  components: {
-    CheckOutlined,
-    EditOutlined,
-  },
+import { mapState, mapActions } from 'vuex'
+import { convertToCamelCase } from '../utils'
 
-  setup() {
-    const columns = [
-      {
-        title: 'name',
-        dataIndex: 'name',
-        width: '30%',
-        slots: {
-          customRender: 'name',
+export default {
+    data: () => {
+        return {
+            editableData: {}
+        }
+    },
+    computed: mapState({
+        tableMeta: state => {
+            let oriTableMeta = state.mainPage.tableData.tableMeta
+            if(!oriTableMeta) {
+                return null
+            }
+            oriTableMeta = oriTableMeta.columnMeta
+            let width = 100 / oriTableMeta.length
+            width = width + "%"
+            let columns = oriTableMeta.map(item => {
+                let realColumn = {}
+                realColumn.title = item.displayName
+                realColumn.dataIndex = convertToCamelCase(item.columnName)
+                realColumn.width = width
+                realColumn.slots = {
+                    customRender: item.columnName,
+                }
+                return realColumn
+            })
+            columns.push({
+                title: 'operation',
+                dataIndex: 'operation',
+                slots: {
+                    customRender: 'operation',
+                },
+            })
+            return columns
         },
-      },
-      {
-        title: 'age',
-        dataIndex: 'age',
-      },
-      {
-        title: 'address',
-        dataIndex: 'address',
-      },
-      {
-        title: 'operation',
-        dataIndex: 'operation',
-        slots: {
-          customRender: 'operation',
+        tableData: state => {
+            if(!state.mainPage.tableData.tableData) {
+                return null
+            }
+            let processedData = state.mainPage.tableData.tableData.map((item, index) => {
+                item.key = index
+                return item
+            })
+            console.log(processedData)
+            return processedData
         },
-      },
-    ];
-    const dataSource = ref([
-      {
-        key: '0',
-        name: 'Edward King 0',
-        age: 32,
-        address: 'London, Park Lane no. 0',
-      },
-      {
-        key: '1',
-        name: 'Edward King 1',
-        age: 32,
-        address: 'London, Park Lane no. 1',
-      },
-    ]);
-    const count = computed(() => dataSource.value.length + 1);
-    const editableData = reactive({});
-
-    const edit = key => {
-      editableData[key] = cloneDeep(dataSource.value.filter(item => key === item.key)[0]);
-    };
-
-    const save = key => {
-      Object.assign(dataSource.value.filter(item => key === item.key)[0], editableData[key]);
-      delete editableData[key];
-    };
-
-    const onDelete = key => {
-      dataSource.value = dataSource.value.filter(item => item.key !== key);
-    };
-
-    const handleAdd = () => {
-      const newData = {
-        key: `${count.value}`,
-        name: `Edward King ${count.value}`,
-        age: 32,
-        address: `London, Park Lane no. ${count.value}`,
-      };
-      dataSource.value.push(newData);
-    };
-
-    return {
-      columns,
-      onDelete,
-      handleAdd,
-      dataSource,
-      editableData,
-      count,
-      edit,
-      save,
-    };
-  },
-});
-</script>
-<style lang="less">
-.editable-cell {
-  position: relative;
-  .editable-cell-input-wrapper,
-  .editable-cell-text-wrapper {
-    padding-right: 24px;
-  }
-
-  .editable-cell-text-wrapper {
-    padding: 5px 24px 5px 5px;
-  }
-
-  .editable-cell-icon,
-  .editable-cell-icon-check {
-    position: absolute;
-    right: 0;
-    width: 20px;
-    cursor: pointer;
-  }
-
-  .editable-cell-icon {
-    margin-top: 4px;
-    display: none;
-  }
-
-  .editable-cell-icon-check {
-    line-height: 28px;
-  }
-
-  .editable-cell-icon:hover,
-  .editable-cell-icon-check:hover {
-    color: #108ee9;
-  }
-
-  .editable-add-btn {
-    margin-bottom: 8px;
-  }
+        cols: state => {
+            let oriTableMeta = state.mainPage.tableData.tableMeta
+            if(!oriTableMeta) {
+                return null
+            }
+            oriTableMeta = oriTableMeta.columnMeta
+            let columns = oriTableMeta.map(item => {
+                return convertToCamelCase(item.columnName)
+            })
+            return columns
+        }
+    }),
+    methods: {
+        edit(key) {
+            console.log(key)
+            this.editableData[key] = cloneDeep(this.tableData.filter(item => key === item.key)[0]);
+        },
+        save(key) {
+            Object.assign(this.tableData.filter(item => key === item.key)[0], this.editableData[key]);
+            delete this.editableData[key];
+        },
+        cancel(key) {
+            delete this.editableData[key];
+        },
+        ...mapActions([
+            'mainPage/pullMainTableData'
+        ])
+    }
 }
-.editable-cell:hover .editable-cell-icon {
-  display: inline-block;
+</script>
+<style scoped>
+.editable-row-operations a {
+  margin-right: 8px;
+}
+
+.main-table {
+    flex-grow: 1
 }
 </style>

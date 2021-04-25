@@ -16,8 +16,8 @@ import axios from 'axios'
             in_date: '20201123'
         }).then(resp => {
             finalData.tableData = resp.data
+            resolve(finalData)
         })
-        resolve(finalData)
     }).catch(resp => {
         reject(resp)
     })

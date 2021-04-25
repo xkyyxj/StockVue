@@ -25,6 +25,8 @@ export default {
 .main-page {
     display: flex;
     flex-direction: row;
+    height: 100%;
+    width: 100%;
 }
 
 #app {
@@ -33,7 +35,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 5px;
+  padding-top: 5px;
+  width: 100%;
+  height: 100%;
 }
 
 .canvas-table {
