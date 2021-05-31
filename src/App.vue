@@ -1,22 +1,16 @@
 <template>
   <div class="main-page">
-    <CategoryTree/>
-    <div class="canvas-table">
-        <canvas id="canvas"/>
-        <MainTable/>
-    </div>
+    <MainPage/>
   </div>
 </template>
 
 <script>
-import CategoryTree from './components/CategoryTree.vue'
-import MainTable from './components/MainTable.vue'
+import MainPage from './components/MainPage/MainPage.vue'
 
 export default {
   name: 'App',
   components: {
-    MainTable,
-    CategoryTree
+    MainPage
   }
 }
 </script>
@@ -24,7 +18,7 @@ export default {
 <style lang="less">
 .main-page {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     height: 100%;
     width: 100%;
 }

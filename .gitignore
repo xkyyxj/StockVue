@@ -2,6 +2,11 @@
 node_modules
 /dist
 
+/src/wasm/pkg
+
+/src/wasm/target
+
+/src/wasm/.idea
 
 # local env files
 .env.local

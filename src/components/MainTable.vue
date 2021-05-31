@@ -50,6 +50,7 @@ export default {
             let columns = oriTableMeta.map(item => {
                 let realColumn = {}
                 realColumn.title = item.displayName
+                // 列名转换成驼峰命名法，保证和返回的Meta数据相匹配
                 realColumn.dataIndex = convertToCamelCase(item.columnName)
                 realColumn.width = width
                 realColumn.slots = {
