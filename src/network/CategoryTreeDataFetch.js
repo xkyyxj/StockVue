@@ -1,5 +1,5 @@
 import axios from 'axios'
-const wasm = import('../wasm/pkg')
+// const wasm = import('../wasm/pkg')
 
 /**
  * 获取左树的结构数据，然后刷新界面
@@ -11,13 +11,13 @@ function fetchCategoryTreeData(resolve, reject) {
     axios.get("http://localhost:9091/queryConfig/categoryConfig").then((resp) => {
         let treeData = constructTreeLevel(resp.data)
         resolve(treeData)
-        wasm.then((value) => {
-            let value2 = [{
-                high: 123
-            }]
-            console.log(value.pass_value(value2))
-            console.log(value)
-        })
+        // wasm.then((value) => {
+        //     let value2 = [{
+        //         high: 123
+        //     }]
+        //     console.log(value.pass_value(value2))
+        //     console.log(value)
+        // })
     }).catch(resp => {
         console.log(resp)
         reject(resp)

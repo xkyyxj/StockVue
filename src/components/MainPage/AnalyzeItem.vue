@@ -1,5 +1,5 @@
 <template>
-  <div class="analyze-item" :style="{backgroundColor: color}" @click="itemClicked">
+  <div class="analyze-item" :style="{backgroundColor: color}">
     <span class="font-style">{{title}}</span>
   </div>
 </template>

@@ -1,17 +1,23 @@
 <template>
-  <div class="main-page">
-    <MainPage/>
-  </div>
+    <div class="main-page">
+        <MainPage/>
+    </div>
 </template>
 
 <script>
 import MainPage from './components/MainPage/MainPage.vue'
+// import Comp from "@/Comp";
 
 export default {
-  name: 'App',
-  components: {
-    MainPage
-  }
+    name: 'App',
+    data() {
+      return {
+          num: 10
+      }
+    },
+    components: {
+        MainPage,
+    }
 }
 </script>
 
@@ -24,14 +30,14 @@ export default {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  padding-top: 5px;
-  width: 100%;
-  height: 100%;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    padding-top: 5px;
+    width: 100%;
+    height: 100%;
 }
 
 .canvas-table {

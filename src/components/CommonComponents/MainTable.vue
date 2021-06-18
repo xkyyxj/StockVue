@@ -1,5 +1,7 @@
 <template>
-  <a-table class="main-table" :columns="tableMeta" :data-source="tableData" bordered>
+  <a-table
+      class="main-table" :columns="tableMeta" :data-source="tableData" bordered
+      :customRow="customRow">
     <template v-for="col in cols" #[col]="{ text, record }" :key="col">
       <div>
         <a-input
@@ -30,9 +32,12 @@
 <script>
 import { cloneDeep } from 'lodash-es';
 import { mapState, mapActions } from 'vuex'
-import { convertToCamelCase } from '../utils'
+import { convertToCamelCase } from '@/utils'
 
 export default {
+    props: {
+        rowDoubleClicked: Function
+    },
     data: () => {
         return {
             editableData: {}
@@ -102,6 +107,19 @@ export default {
         cancel(key) {
             delete this.editableData[key];
         },
+        onDoubleClick(val) {
+          console.log(val)
+        },
+        customRow(record, index) {
+          return {
+            onDblclick: () => {
+                if(this.rowDoubleClicked) {
+                    this.rowDoubleClicked(record, index)
+                }
+                console.log("hahahahahhaha")
+            }
+          }
+        },
         ...mapActions([
             'mainPage/pullMainTableData'
         ])
@@ -114,6 +132,8 @@ export default {
 }
 
 .main-table {
-    flex-grow: 1
+  width: 100%;
+  height: fit-content;
+    /*flex-grow: 1*/
 }
 </style>

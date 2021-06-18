@@ -5,13 +5,16 @@ import 'ant-design-vue/dist/antd.css';
 import Vuex from 'vuex'
 import { createRouter, createWebHashHistory } from "vue-router";
 import stockCreateStore from './store'
+import HistoryDown from './components/HistoryDown/HistoryDown'
+import WaitSelect from './components/HistoryDown/WaitSelect'
 
 let store = stockCreateStore()
 
 // 每个路由都需要映射到一个组件。
 // 我们后面再讨论嵌套路由。
 const routes = [
-
+    { path: '/historyDown', component: HistoryDown },
+    { path: '/waitSelect', component: WaitSelect }
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置

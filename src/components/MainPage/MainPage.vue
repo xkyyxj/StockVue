@@ -8,17 +8,7 @@
           <div class="stock-tab-item">Tab 1</div>
         </span>
       </template>
-      <div class="stock-tab-item">
-        <a-divider class="divider-style">Calculate</a-divider>
-        <div class="item-list">
-          <AnalyzeItem title="" color='#FFCC99'/>
-        </div>
-        <a-divider class="divider-style">Analyze</a-divider>
-        <div class="item-list">
-          <AnalyzeItem title="haha" color='#FFCC99'/>
-        </div>
-        <a-divider class="divider-style">In time</a-divider>
-      </div>
+      <router-view></router-view>
     </a-tab-pane>
     <!-- 第二个页签 -- 展示主界面 -->
     <a-tab-pane key="2">
@@ -43,11 +33,11 @@
       <div class="stock-tab-item">
         <a-divider class="divider-style">Calculate</a-divider>
         <div class="item-list">
-          <AnalyzeItem title="" color='#FFCC99'/>
+          <router-link to="/historyDown"><AnalyzeItem title="" color='#FFCC99' @click="clickItem"/></router-link>
         </div>
         <a-divider class="divider-style">Analyze</a-divider>
         <div class="item-list">
-          <AnalyzeItem title="haha" color='#FFCC99'/>
+          <router-link to="/waitSelect"><AnalyzeItem title="haha" color='#FFCC99'/></router-link>
         </div>
         <a-divider class="divider-style">In time</a-divider>
       </div>
@@ -59,6 +49,17 @@
   export default {
     components: {
       AnalyzeItem
+    },
+    data() {
+      return {
+        activeKey: '2'
+      }
+    },
+    methods : {
+      clickItem() {
+        console.log("clicked")
+        this.activeKey = '1'
+      }
     }
   }
 </script>
